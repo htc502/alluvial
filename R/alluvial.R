@@ -106,11 +106,12 @@ alluvial <- function( ..., freq,
   }
   p$col <- apply(col, 2, function(x) do.call(rgb, c(as.list(x), maxColorValue = 256)))
   # also for category block colors
-    nblock = apply(d, 2, function(e) length(unique(e)))
+  catblock = unique(unlist(apply(d,2,function(e) unique(e))))
+  nblock = length(catblock)
   if(is.null(block.col)) {
-   block.col = rep(NA,sum(nblock))
+   block.col = rep(NA,nblock);names(block.col) = catblock
   } else {
-    if(length(block.col) != sum(nblock)) stop('length of block.col should be idenditcal with the number of categorical blocks')
+    if(length(block.col) != sum(nblock) | length(na.omit(names(block.col))) != nblock ) stop('length of block.col should be idenditcal with the number of categorical blocks. Also, block.col should include corresponding category names.')
     block.col <- col2rgb(block.col,alpha = T)
     block.col <- apply(block.col, 2, function(x) do.call(rgb, c(as.list(x), maxColorValue = 256)))
   }
@@ -196,7 +197,7 @@ alluvial <- function( ..., freq,
       for(k in seq_along(ax))
       {
         rect( j-cw, ax[[k]][1], j+cw, ax[[k]][2] ,
-             col = ifelse(j==1,block.col[k],block.col[sum(nblock[1:(j-1)])+k]))
+             col = block.col[names(ax)[k]])
       }
     } else
     {
