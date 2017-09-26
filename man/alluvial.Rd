@@ -6,8 +6,8 @@
 \usage{
 alluvial(..., freq, col = "gray", border = 0, layer, hide = FALSE,
   alpha = 0.5, gap.width = 0.05, xw = 0.1, cw = 0.1, blocks = TRUE,
-  ordering = NULL, axis_labels = NULL, mar = c(2, 1, 1, 1),
-  cex = par("cex"), xlim_offset = c(0, 0), ylim_offset = c(0, 0),
+  block.col = NULL, ordering = NULL, axis_labels = NULL, mar = c(2, 1,
+  1, 1), cex = par("cex"), xlim_offset = c(0, 0), ylim_offset = c(0, 0),
   cex.axis = par("cex.axis"), axes = TRUE, ann = TRUE, title = NULL)
 }
 \arguments{
@@ -32,6 +32,8 @@ alluvial(..., freq, col = "gray", border = 0, layer, hide = FALSE,
 \item{cw}{numeric, width of the category axis}
 
 \item{blocks}{logical, whether to use blocks to tie the flows together at each category, versus contiguous ribbons (also admits character value "bookends")}
+
+\item{block.col}{color of category blocks}
 
 \item{ordering}{list of numeric vectors allowing to reorder the alluvia on each axis separately, see Examples}
 
@@ -73,7 +75,7 @@ columns:
 \item{\code{.axis_from}, \code{.axis_to}}{IDs of axes that
 a segment originates from and goes to}
 \item{\code{.x}, \code{.y}}{X and Y locations of the alluvium midpoints}
-\item{\code{.slope}}{The (approximate) slope od the alluvium at the midpoint}
+\item{\code{.slope}}{The (approximate) slope of the alluvium at the midpoint}
 }
 }
 }
