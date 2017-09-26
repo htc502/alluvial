@@ -13,6 +13,7 @@
 #' @param xw numeric, the distance from the set axis to the control points of the xspline
 #' @param cw numeric, width of the category axis
 #' @param blocks logical, whether to use blocks to tie the flows together at each category, versus contiguous ribbons (also admits character value "bookends")
+#' @param block.col color of category blocks
 #' @param ordering list of numeric vectors allowing to reorder the alluvia on each axis separately, see Examples
 #' @param axis_labels character, labels of the axes, defaults to variable names in the data
 #' @param mar numeric, plot margins as in \code{\link{par}}
@@ -65,6 +66,7 @@ alluvial <- function( ..., freq,
                      col="gray", border=0, layer, hide=FALSE, alpha=0.5,
                      gap.width=0.05, xw=0.1, cw=0.1,
                      blocks = TRUE,
+                     block.col = NULL,
                      ordering=NULL,
                      axis_labels=NULL,
                      mar = c(2, 1, 1, 1),
@@ -103,6 +105,15 @@ alluvial <- function( ..., freq,
     col["alpha", ] <- p$alpha*256
   }
   p$col <- apply(col, 2, function(x) do.call(rgb, c(as.list(x), maxColorValue = 256)))
+  # also for category block colors
+    nblock = apply(d, 2, function(e) length(unique(e)))
+  if(is.null(block.col)) {
+   block.col = rep(NA,sum(nblock))
+  } else {
+    if(length(block.col) != sum(nblock)) stop('length of block.col should be idenditcal with the number of categorical blocks')
+    block.col <- col2rgb(block.col,alpha = T)
+    block.col <- apply(block.col, 2, function(x) do.call(rgb, c(as.list(x), maxColorValue = 256)))
+  }
   # convert character vectors in data to factors
   isch <- sapply(d, is.character)
   d[isch] <- lapply(d[isch], as.factor)
@@ -184,7 +195,8 @@ alluvial <- function( ..., freq,
     {
       for(k in seq_along(ax))
       {
-        rect( j-cw, ax[[k]][1], j+cw, ax[[k]][2] )
+        rect( j-cw, ax[[k]][1], j+cw, ax[[k]][2] ,
+             col = ifelse(j==1,block.col[k],block.col[sum(nblock[1:(j-1)])+k]))
       }
     } else
     {
